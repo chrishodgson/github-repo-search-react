@@ -18,3 +18,11 @@ The site will open in your browser on `http://localhost:3000`
 - add filter by language
 - use typescript
 - add tests
+
+# Respository Search Results
+
+![Respository Search Results](https://github.com/chrishodgson/github-repo-search-react/blob/main/docs/searchResults.png)
+
+# Respository Page
+
+![Respository Page](https://github.com/chrishodgson/github-repo-search-react/blob/main/docs/repositoryPage.png)
