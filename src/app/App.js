@@ -25,7 +25,7 @@ export default function App() {
           </Grid>
         </Grid>
 
-        <Router >
+        <Router>
           <Switch>
             <Route path="/repository/:id" render={props =>
               <Grid sx={{ mt: 2 }} container columns={{ xs: 4 }}>
