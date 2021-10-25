@@ -5,6 +5,6 @@ import readmeReducer from '../features/repositories/readmeSlice'
 export default configureStore({
   reducer: {
     repositories: repositoriesReducer,
-    // readme: readmeReducer
+    readme: readmeReducer
   }
 })

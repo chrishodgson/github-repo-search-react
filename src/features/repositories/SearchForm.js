@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux'
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import { fetchRepositories } from './repositoriesSlice';
 
 export default function SearchForm() {
@@ -12,13 +12,13 @@ export default function SearchForm() {
   const search = () => searchText ? dispatch(fetchRepositories(searchText)) : null
 
   return (
-    <Box>
+    <>
       <TextField size="small" sx={{ mt: -0.25, mr: 1 }}
         label="Enter a name" variant="outlined"
         onChange={ onSearchTextChanged }
         onKeyDown={onSearchTextKeyDown}
         />
       <Button size="medium" variant="outlined" onClick={ onSearchButtonClicked }>Search</Button>
-    </Box>
+    </>
   );
 }

@@ -1,15 +1,29 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux'
-import { Box, Typography } from '@mui/material';
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
+import ReactMarkdown from 'react-markdown'
+import { Box } from '@mui/material';
+import { fetchReadme, selectReadme, clearReadme } from './readmeSlice';
+import { selectRepositoryById } from './repositoriesSlice';
 
-export default function ItemReadme() {
-  const readme = null // 'readme text' //useSelector(state => state.readme)
+export default function ItemReadme(props) {
+  const { id } = props
+  const repository = useSelector(selectRepositoryById(id))
+  if (!repository) {
+    return <Box>Repository not found. <Link to="/">Please return to homepage</Link></Box>
+  }
+  const readme = useSelector(selectReadme)
+  const dispatch = useDispatch()
 
-  if (!readme) return null
+  if (!readme) {
+    dispatch(fetchReadme(repository))
+    return <Box>Loading readme...</Box>
+  }
+  if (readme.id.toString() !== id) {
+    dispatch(clearReadme())
+  }
+
   return (
-    <Box sx={{ mt: 4, alignContent: "right" }} color="text.secondary">
-      <Typography sx={{ mb: 2 }} variant="h6" >Repository Readme</Typography>
-      <Typography align="justify">{ readme }</Typography>
-    </Box>
+      <ReactMarkdown>{ readme.decoded }</ReactMarkdown>
   );
 }
