@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import ReactMarkdown from 'react-markdown'
 import { Box } from '@mui/material';
-import { fetchReadme, selectReadme, clearReadme } from './readmeSlice';
-import { selectRepositoryById } from './repositoriesSlice';
+import { selectRepositoryById, fetchReadme } from './repositoriesSlice';
 
 export default function ItemReadme(props) {
   const { id } = props
@@ -12,18 +11,15 @@ export default function ItemReadme(props) {
   if (!repository) {
     return <Box>Repository not found. <Link to="/">Please return to homepage</Link></Box>
   }
-  const readme = useSelector(selectReadme)
-  const dispatch = useDispatch()
 
+  const readme = repository.readme
   if (!readme) {
+    const dispatch = useDispatch()
     dispatch(fetchReadme(repository))
-    return <Box>Loading readme...</Box>
-  }
-  if (readme.id.toString() !== id) {
-    dispatch(clearReadme())
+    return <Box>Loading Readme content...</Box>
   }
 
   return (
-      <ReactMarkdown>{ readme.decoded }</ReactMarkdown>
+      <ReactMarkdown>{ readme }</ReactMarkdown>
   );
 }

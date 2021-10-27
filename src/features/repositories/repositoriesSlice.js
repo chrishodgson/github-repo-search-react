@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit'
 import get from "../../app/github-client";
 
 const initialState = []
@@ -19,30 +19,26 @@ export const fetchRepositories = createAsyncThunk('repositories/fetchRepositorie
   }))
 })
 
-// export const fetchReadme2 = createAsyncThunk('repositories/fetchReadme2', async repository => {
-//   const { owner, repo } = repository
-//   const response = await get(`repos/${owner}/${repo}/readme`)
-//   const encoded = response.data.content || ''
-//   const decoded = Buffer.from(encoded, 'base64').toString('utf-8')
-//   return { id, decoded }
-// })
+export const fetchReadme = createAsyncThunk('repositories/fetchReadme', async repository => {
+  const { owner, repo, id } = repository
+  const response = await get(`repos/${owner}/${repo}/readme`)
+  const encoded = response.data.content || ''
+  const decoded = Buffer.from(encoded, 'base64').toString('utf-8')
+  return { id, decoded }
+})
 
 export const repositoriesSlice = createSlice({
   name: 'repositories',
   initialState,
   reducers: {},
-  extraReducers(builder) {
+  extraReducers: builder => {
+    builder.addCase(fetchReadme.fulfilled, (state, action) => {
+      const { id, decoded } = action.payload
+      const index = state.findIndex(repository => repository.id === id)
+      state[index].readme = decoded
+      return state
+    }),
     builder.addCase(fetchRepositories.fulfilled, (state, action) => action.payload)
-
-    // builder.addCase(fetchReadme2.fulfilled, (state, action) => {
-    //   const { id, decoded } = action.payload
-    //   return state.map(repository => {
-    //     if (repository.id === id) {
-    //       repository.readme = decoded
-    //     }
-    //     return repository
-    //   })
-    // })
   }
 })
 
